@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Team Table (dark UI)</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Manrope&display=swap" rel="stylesheet" type='text/css'>
+	<link rel="stylesheet" href="style.css">
+	<style>
+	  
+
+
+:root {
+    --text-gray: #e7e7e7;
+    --bg: #7048ec;
+    --table-bg: white;
+    --primary: #7048ec;
+    --primary-dark: #5e3cc4;
+    --text: #464646;
+    --text-dark: #1a1a1a;
+    --white: #ffffff;
+    --gray-light: #7d7d7d;
+    --inactive: #ffd071;
+    --offline: #bbbbbb;
+    --table-head-bg: #f7f7f7;
+    --table-head-text: #8f8c9f;
+    --status--paid-bg: #49b77b;
+    --status--paid-border: #49b77b;
+    --status--cancelled: #ff8585;
+    --status--pending: #d99f00;
+    --border-color: #f5f6f8;
+    --border-resizer: #d6d6d6;
+    --font: 'Manrope', sans-serif;
+    --font-size-base: 0.95rem;
+    --font-size-large: 1.2rem;
+    --font-size-small: 0.85rem;
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+*::selection {
+    background: var(--primary);
+    color: var(--white);
+}
+
+body {
+    font-family: var(--font);
+    display: grid;
+    place-items: center;
+    height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+}
+
+.table-widget {
+    border-radius: 1rem;
+    background: var(--table-bg);
+    padding: var(--spacing-xl);
+    text-align: left;
+    overflow-x: auto;
+    color: var(--text);
+    min-width: 600px;
+    max-width: 100%;
+    box-shadow: 
+        rgba(0, 0, 0, 0.02) 
+            0px 1px 3px 0px, 
+        rgba(27, 31, 35, 0.15) 
+        0px 0px 0px 1px;
+}
+
+.table-widget h2 {
+    font-weight: 700;
+    font-size: 1.25rem;
+    gap: 0.5rem;
+    display: flex;
+    align-items: center;
+}
+
+.table-widget h2 svg {
+    width: 2rem;
+    height: 2rem;
+    margin-right: 
+        var(--spacing-sm);
+}
+
+.table-widget table {
+    margin-top: 0.5rem;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.table-widget .caption {
+    display: flex;
+    justify-content: 
+        space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.table-widget footer {
+    margin-top: 1.5rem;
+    display: flex;
+    justify-content: right;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.table-widget thead {
+    background: 
+        var(--table-head-bg);
+    color: var(--table-head-text);
+}
+
+/* expand button */
+.table-widget .export-btn {
+    background: transparent;
+    color: var(--text);
+    border-radius: 0.75rem;
+    cursor: pointer;
+    border: none;
+    font-size: 
+        var(--font-size-large);
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    transition: all 0.3s ease;
+}
+
+.table-widget 
+.export-btn:hover {
+    color: var(--primary);
+}
+
+
+.table-widget .export-btn svg {
+    width: 2rem;
+    height: 2rem;
+}
+
+.table-widget th {
+    padding: 
+        var(--spacing-md);
+    font-size: 
+        var(--font-size-base);
+    font-weight: 700;
+    vertical-align: middle;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    text-align: left;
+    white-space: nowrap;
+    transition: background-color 
+        0.2s ease, 
+        color 0.2s ease;
+}
+
+
+.table-widget th:first-child {
+    border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.table-widget th:last-child {
+    border-radius: 0 0.5rem 0.5rem 0rem;
+}
+
+.table-widget th:hover {
+    color: var(--primary);
+}
+
+.table-widget th.resizable::after {
+    content: '⇅';
+    font-size: 1rem;
+    margin-left: 8px;
+    color: var(--table-head-text);
+}
+
+.table-widget th:hover::after,
+.table-widget th:hover::before {
+    color: var(--primary);
+}
+
+.table-widget 
+th.sortable.sorted-asc::after {
+    content: '▲';
+}
+
+.table-widget 
+th.sortable.sorted-desc::after {
+    content: '▼';
+}
+
+.table-widget td {
+    padding: var(--spacing-md);
+    background: transparent;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+
+.table-widget tbody tr:hover img,
+.table-widget tbody tr:hover .tag {
+    transition: all 0.2s ease;
+    border-color: var(--primary);
+}
+
+.table-widget tbody tr:hover td {
+    cursor: pointer;
+    color: var(--primary);
+
+}
+
+.table-widget .rowCheckbox {
+    inline-size: 1.15rem;
+    block-size: 1.15rem;
+    accent-color: var(--primary);
+    vertical-align: -2px;
+}
+
+.table-widget 
+.rowCheckbox:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 4px 
+    rgb(var(--primary) / .35);
+    border-radius: 4px; 
+}
+
+/* Company Profile */
+.company-profile {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.company-profile img {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 50%;
+    border: 1px solid 
+        var(--text);
+    object-fit: cover;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.profile-info__name {
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+/* status */
+.status {
+    border-radius: 0.45rem;
+    width: fit-content;
+    display: flex;
+    font-weight: 700;
+    gap: var(--spacing-sm);
+    align-items: center;
+    padding: 
+        var(--spacing-sm) 
+        var(--spacing-md);
+    font-weight: 600;
+    font-size: 
+        var(--font-size-small);
+    transition: 
+        border-color 0.2s ease;
+    text-transform: capitalize;
+}
+
+.status--filled {
+    color: 
+        var(--status--paid-border);
+    border: 
+        1.5px solid 
+        var(--status--paid-border);
+}
+
+.avatar__wrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.avatar {
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* more status */
+.status--cancelled {
+    color: 
+        var(--status--cancelled);
+    border: 
+        1.5px solid 
+        var(--status--cancelled);
+}
+
+.status--pending {
+    color: 
+        var(--status--pending);
+    border: 
+        1.5px solid 
+        var(--status--pending);
+}
+
+.download-link {
+    display: none;
+}
+	</style>
+</head>
+
+<body>
+	<article class="table-widget">
+		<div class="caption">
+			<h2>
+				<svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-shopping-cart"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 19m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M17 17h-11v-14h-2" /><path d="M6 5l14 1l-1 7h-13" /></svg>
+				Product Purchases
+			</h2>
+			<button class="export-btn" type="button">
+				<svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-export" width="24"
+					height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none"
+					stroke-linecap="round" stroke-linejoin="round">
+					<path stroke="none" d="M0 0h24v24H0z" fill="none" />
+					<path d="M14 3v4a1 1 0 0 0 1 1h4" />
+					<path d="M11.5 21h-4.5a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v5m-5 6h7m-3 -3l3 3l-3 3" />
+				</svg>
+				Export
+			</button>
+		</div>
+		<table id="team-table">
+			<thead>
+				<tr>
+					<th>
+						<input type="checkbox" class="resizable rowCheckbox" id="selectAllCheckbox">
+					</th>
+					<th class="resizable sortable" data-column="0">ID</th>
+					<th class="resizable sortable" data-column="1">Purchase Date</th>
+					<th class="resizable sortable" data-column="2">Status</th>
+					<th class="resizable sortable" data-column="3">User</th>
+					<th class="resizable sortable" data-column="4">Order Type</th>
+					<th class="resizable sortable" data-column="5">Status</th>
+				</tr>
+			</thead>
+			<tbody id="team-member-rows">
+                <tr>
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>#1011</td>
+                    <td>13 Sep, 10:01</td>
+                    <td><span class="status status--filled">Paid</span></td>
+                    <td>
+                      <div class="avatar__wrapper">
+                        <img src="assets/alex.jpg" alt="Avatar" class="avatar">
+                        Avery Klein
+                      </div>
+                    </td>
+                    <td>
+                      Modern Frontend Developer
+                    </td>
+                    <td>$79.00</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>#1012</td>
+                    <td>13 Sep, 10:07</td>
+                    <td><span class="status status--filled">Paid</span></td>
+                    <td>
+                      <div class="avatar__wrapper">
+                        <img src="assets/jordan.jpg" alt="Jordan Price" class="avatar">
+                        Jordan Price
+                      </div>
+                    </td>
+                    <td>
+                      Atheros Pass Subscription
+                    </td>
+                    <td>$121.44</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>#1013</td>
+                    <td>13 Sep, 10:12</td>
+                    <td><span class="status status--pending">Pending</span></td>
+                    <td>
+                      <div class="avatar__wrapper">
+                        <img src="assets/melissa.jpg" alt="Melissa Nash" class="avatar">
+                        Melissa Nash
+                      </div>
+                    </td>
+                    <td>
+                      Modern Frontend Developer
+                    </td>
+                    <td>$79.00</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>#1014</td>
+                    <td>13 Sep, 10:19</td>
+                    <td><span class="status status--filled">Paid</span></td>
+                    <td>
+                      <div class="avatar__wrapper">
+                        <img src="assets/taylor.jpg" alt="Taylor Sims" class="avatar">
+                        Taylor Sims
+                      </div>
+                    </td>
+                    <td>
+                      Atheros Pass Subscription
+                    </td>
+                    <td>$121.44</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>#1015</td>
+                    <td>13 Sep, 10:24</td>
+                    <td><span class="status status--cancelled">Canceled</span></td>
+                    <td>
+                      <div class="avatar__wrapper">
+                        <img src="assets/casey.jpg" alt="Casey Blake" class="avatar">
+                        Casey Blake
+                      </div>
+                    </td>
+                    <td>
+                      Modern Frontend Developer
+                    </td>
+                    <td>$79.00</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>#1016</td>
+                    <td>13 Sep, 10:31</td>
+                    <td><span class="status status--pending">Pending</span></td>
+                    <td>
+                      <div class="avatar__wrapper">
+                        <img src="assets/skyler.jpg" alt="Skyler Hart" class="avatar">
+                        Skyler Hart
+                      </div>
+                    </td>
+                    <td>
+                      UX UI Design Process
+                    </td>
+                    <td>$98.00</td>
+                  </tr>
+                  <tr>
+                    <td><input type="checkbox" class="rowCheckbox"></td>
+                    <td>#1017</td>
+                    <td>13 Sep, 10:38</td>
+                    <td><span class="status status--filled">Paid</span></td>
+                    <td>
+                      <div class="avatar__wrapper">
+                        <img src="assets/jamie.jpg" alt="Jamie Cross" class="avatar">
+                        Jamie Cross
+                      </div>
+                    </td>
+                    <td>
+                      Modern Frontend Developer
+                    </td>
+                    <td>$79.00</td>
+                  </tr>
+            </tbody>
+		</table>
+		<footer>
+			7 Row Results
+		</footer>
+	</article>
+	<script src="script.js"></script>
+	<script>
+	  
+
+
+
+const exportButton = document.querySelector(
+  ".export-btn"
+);
+
+// Helpers
+function textify(cell) {
+  return cell.textContent.replace(/\s+/g, ' ').trim();
+}
+
+function csvEscape(value) {
+  const v = String(value).replace(/"/g, '""');
+  return `"${v}"`;
+}
+
+function exportTableToCSV(table, { filename = 'transactions.csv', selectedOnly = false, skipCheckboxCol = true } = {}) {
+  const tbl = typeof table === 'string' ? document.querySelector(table) : table;
+  if (!tbl) { console.error('Table not found'); return; }
+
+  // Grab header cells (assumes one TH row)
+  const headerRow = tbl.tHead?.rows?.[0];
+  if (!headerRow) { console.error('Missing thead/th row'); return; }
+  const startIdx = skipCheckboxCol ? 1 : 0;
+  const headerCells = Array.from(headerRow.cells).slice(startIdx);
+  const header = headerCells.map(c => csvEscape(textify(c))).join(',');
+
+  // Grab body rows
+  const body = tbl.tBodies?.[0];
+  if (!body) { console.error('Missing tbody'); return; }
+  const rows = [];
+  for (const tr of Array.from(body.rows)) {
+    // If exporting only selected rows, require first-cell checkbox to be checked
+    if (selectedOnly) {
+      const cb = tr.cells[0]?.querySelector('input[type="checkbox"]');
+      if (!cb || !cb.checked) continue;
+    }
+    const cells = Array.from(tr.cells).slice(startIdx).map(td => csvEscape(textify(td)));
+    rows.push(cells.join(','));
+  }
+
+  if (!rows.length) { alert('No rows to export.'); return; }
+
+  const csv = '\uFEFF' + [header, ...rows].join('\n');
+  const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = Object.assign(document.createElement('a'), { href: url, download: filename });
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+exportButton.addEventListener("click", function () {
+  exportTableToCSV(".table-widget > table", { selectedOnly: true });
+});
+
+let currentSortColumn = null;
+let currentSortDirection = 'asc';
+let isResizing = false;  // NEW FLAG
+
+function sortTableByColumn(columnIndex) {
+  if (isResizing) {
+    // Block sorting if resizing just happened
+    return;
+  }
+
+  const table = document.getElementById('team-table');
+  const rows = Array.from(
+    table.querySelectorAll('tbody tr')
+  );
+  const isTextColumn = columnIndex !== 1;
+  const direction = (currentSortColumn === columnIndex && 
+      currentSortDirection === 'asc') ? 'desc' : 'asc';
+
+  rows.sort((rowA, rowB) => {
+    let cellA = rowA.children[columnIndex].textContent.trim();
+    let cellB = rowB.children[columnIndex].textContent.trim();
+
+    if (!isTextColumn) {
+      cellA = cellA.toLowerCase();
+      cellB = cellB.toLowerCase();
+    }
+
+    if (direction === 'asc') {
+      return cellA.localeCompare(
+        cellB, undefined, { numeric: true }
+      );
+    } else {
+      return cellB.localeCompare(
+        cellA, undefined, { numeric: true }
+      );
+    }
+  });
+
+  rows.forEach(row => 
+    table.querySelector('tbody').appendChild(row)
+  );
+
+  document.querySelectorAll('#team-table th')
+  .forEach(th => {
+    th.classList.remove('sorted-asc', 'sorted-desc');
+  });
+
+  const header = document.querySelector(
+    `#team-table th:nth-child(${columnIndex + 1})`
+  );
+  header.classList.add(
+    direction === 'asc' ? 'sorted-asc' : 'sorted-desc'
+  );
+
+  currentSortColumn = columnIndex;
+  currentSortDirection = direction;
+}
+
+document.querySelectorAll('#team-table th')
+.forEach((th, index) => {
+  th.addEventListener('click', () => {
+    sortTableByColumn(index);
+  });
+});
+
+const columns = document.querySelectorAll('#team-table th.resizable')
+
+
+columns.forEach((th, i) => {
+  if (i < columns.length - 1) {
+    let startX, startWidth;
+
+    const resizer = document.createElement('div');
+    resizer.style.width = '1px';
+    resizer.style.height = '100%';
+    resizer.style.position = 'absolute';
+    resizer.style.top = '0';
+    resizer.style.right = '0';
+    resizer.style.background = '#cacacaff';
+    resizer.style.cursor = 'col-resize';
+    th.style.position = 'relative';
+
+    resizer.addEventListener('mousedown', (e) => {
+      isResizing = true;  
+      startX = e.pageX;
+      startWidth = parseInt(
+        document.defaultView.getComputedStyle(th).width, 
+        10
+      );
+      document.documentElement.addEventListener(
+        'mousemove', onMouseMove);
+      document.documentElement.addEventListener(
+        'mouseup', onMouseUp);
+    });
+
+    function onMouseMove(e) {
+      const newWidth = startWidth + (e.pageX - startX);
+      th.style.width = newWidth + 'px';
+    }
+
+    function onMouseUp() {
+      document.documentElement.removeEventListener(
+        'mousemove', onMouseMove);
+      document.documentElement.removeEventListener(
+        'mouseup', onMouseUp);
+
+      setTimeout(() => isResizing = false, 100);
+    }
+
+    th.appendChild(resizer);
+  }
+});
+
+
+const selectAllCheckbox = document.getElementById(
+  'selectAllCheckbox'
+);
+const rowCheckboxes = document.querySelectorAll(
+  '.rowCheckbox'
+);
+
+selectAllCheckbox.addEventListener('click', 
+  function() {
+    rowCheckboxes.forEach(checkbox => {
+        checkbox.checked = this.checked;
+    });
+});
+
+rowCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('click', function() {
+        const allChecked = document.querySelectorAll(
+          '.rowCheckbox:checked'
+        );
+
+        selectAllCheckbox.checked = 
+          allChecked.length === rowCheckboxes.length;
+    });
+});
+	</script>
+</body>
+
+</html>
